@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/JOoNnN/jatchy_util/issues"
   },
-  "homepage": "https://github.com/JOoNnN/jatchy_util#readme"
+  "homepage": "https://github.com/JOoNnN/jatchy_util#readme",
+  "dependencies": {
+    "minimist": "^1.2.5"
+  }
 }
