@@ -1,7 +1,7 @@
 // -f <function> -s <string> -o <{additional params}>
 const flagF = { f : "f", o: "o", s: "s", _: "_" }
 const Jatchy = module.exports = {}
-const fns = ["capital", "encrypt"]; // future function chain []
+const fns = ["capital", "encrypt", "replace", ]; // future function chain []
 const argv = require('minimist')(process.argv.slice(2));
 
 const helpers = {
@@ -76,8 +76,19 @@ const exec = {
             var _sym = o["symbol"] || " "
             var formatStr = str.split(_sym).map(t => ( t.slice(0, _idx) + t[_idx].toUpperCase() + t.slice(_idx + 1)) ).join(" ");
             console.log("Formatted String: " + formatStr);
+            return true;
         }
     });
+
+    /**
+     * @str string
+     * @hops number
+     * @description  [a, b, c] => (3) => [c, d, e] 
+     */
+    helpers.gExpose(fns[1], function (str, hops) {
+        var charList = ["a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9"].split(",")
+        console.log(str, hops);
+    })
 
     helpers.compose(validators.Vflag)(exec.start)
 })();
