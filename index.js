@@ -1,7 +1,7 @@
 // -f <function> -s <string> -o <{additional params}>
 const flagF = { f : "f", o: "o", s: "s", _: "_" }
 const Jatchy = module.exports = {}
-const fns = ["capital", "encrypt", "replace", ]; // future function chain []
+const fns = ["capital", "encrypt", "replace", "sort" ]; // future function chain []
 const argv = require('minimist')(process.argv.slice(2));
 
 const helpers = {
@@ -10,6 +10,12 @@ const helpers = {
     },
     gRequire: function (name) {
         return Jatchy[name]; //= require('./jatchy/' + name);
+    },
+    gRet: function () {
+        if (arguments.length > 0) {
+            return 35;
+        }
+        return "a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9".split(","); //35
     },
     compose: function () {
         const fn = [...arguments];
@@ -24,12 +30,32 @@ const helpers = {
     },
     wrap: function (fn) {
         return fn
+    },
+    parse: function(str) {
+        return JSON.parse(str);
+    },
+    /**
+     * @param oAray Original Array 
+     * @param mAray Compare Array
+     * @returns []
+     */
+    quickS: function(oAray, mAray) {
+        return [];
+    },
+    idxOpet(type, actualInt, optInt) {
+        let v = 0;
+        if (type === "encrypt") {
+            v = actualInt + optInt
+            return v > this.gRet(0) ? actualInt : v ;
+        }
+        v = actualInt - optInt;
+        return v <= 0 ? actualInt : v
     }
 };
 
 const validators = {
     /**
-     * @param - { _: [] } 
+     * @param obj { _: [] } 
      */
     Vflag: function (obj) {
         if (obj["_"].length > 0) {
@@ -45,6 +71,10 @@ const validators = {
         }
         if (!obj["s"]) {
             throw new Error("String Is Required!");
+        }
+        const _o = helpers.parse(obj["o"])
+        if (_o["type"] !== "" && !["encrypt", "decrypt"].includes(_o["type"]) ) {
+            throw new Error("Encrypt and Decrypt is supported!");
         }
         return obj;
     }
@@ -85,10 +115,20 @@ const exec = {
      * @hops number
      * @description  [a, b, c] => (3) => [c, d, e] 
      */
-    helpers.gExpose(fns[1], function (str, hops) {
-        var charList = ["a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,6,7,8,9"].split(",")
-        console.log(str, hops);
+    helpers.gExpose(fns[1], function (str, others) {
+        const _o = helpers.parse(others);
+        const _h = _o["hops"];
+        const _t = _o["type"] || null;
+        const charList = helpers.gRet();
+
+        if (_t) {
+            const _pos = str.split("").map((t) => (helpers.idxOpet(_t, charList.indexOf(t.toLowerCase()), _h)));
+            const _f = _pos.map((t) => charList[t]).join("");
+            console.log("Final Result Is: " + _f)
+        }   
+        return str;
     })
 
+    // retrieve params need to change
     helpers.compose(validators.Vflag)(exec.start)
 })();
