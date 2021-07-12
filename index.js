@@ -1,7 +1,13 @@
-// -f <function> -s <string> -o <{additional params}>
+/**
+ * -f <function> -s <string> 
+ * -o <{
+ *      index: number,
+ *      symbol: string
+ * }
+ */
 const flagF = { f : "f", o: "o", s: "s", _: "_" }
 const Jatchy = module.exports = {}
-const fns = ["capital", "encrypt", "replace", "sort" ]; // future function chain []
+const fns = ["capital", "encrypt", "replace", "sort", "bind" ]; // future function chain []
 const argv = require('minimist')(process.argv.slice(2));
 
 const helpers = {
@@ -58,23 +64,30 @@ const validators = {
      * @param obj { _: [] } 
      */
     Vflag: function (obj) {
-        if (obj["_"].length > 0) {
-            throw new Error("Check Params!");
-        }
-        for ( let prop in obj ) {
-            if ( !flagF[prop]) {
-                throw new Error("Check Params!");
-            }
-        }
+        // param f and param s are required
         if (!obj["f"]) {
             throw new Error("Function Is Required! Please Specify A Function");
         }
         if (!obj["s"]) {
             throw new Error("String Is Required!");
         }
-        const _o = helpers.parse(obj["o"])
-        if (_o["type"] !== "" && !["encrypt", "decrypt"].includes(_o["type"]) ) {
-            throw new Error("Encrypt and Decrypt is supported!");
+        // capital validation
+        if (obj[f] === fns[0]) {
+            if (obj["_"].length > 0) {
+                throw new Error("Check Params!");
+            }
+            for ( let prop in obj ) {
+                if ( !flagF[prop]) {
+                    throw new Error("Check Params!");
+                }
+            }
+        }
+        // encrypt validation
+        if (obj[f] === fns[1]) {
+            const _o = helpers.parse(obj["o"])
+            if (_o["type"] !== "" && !["encrypt", "decrypt"].includes(_o["type"]) ) {
+                throw new Error("Encrypt and Decrypt is supported!");
+            }
         }
         return obj;
     }
@@ -127,6 +140,10 @@ const exec = {
             console.log("Final Result Is: " + _f)
         }   
         return str;
+    })
+
+    helpers.gExpose(fns[2], function() {
+
     })
 
     // retrieve params need to change
