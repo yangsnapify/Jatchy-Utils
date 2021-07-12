@@ -1,6 +1,6 @@
 {
   "name": "jatchy_util",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "jatchy_util",
   "main": "index.js",
   "scripts": {
