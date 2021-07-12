@@ -7,7 +7,7 @@
  */
 const flagF = { f : "f", o: "o", s: "s", _: "_" }
 const Jatchy = module.exports = {}
-const fns = ["capital", "encrypt", "replace", "sort", "bind" ]; // future function chain []
+const fns = ["capital", "crypt", "replace", "sort", "bind",  ]; // future function chain []
 const argv = require('minimist')(process.argv.slice(2));
 
 const helpers = {
@@ -64,6 +64,7 @@ const validators = {
      * @param obj { _: [] } 
      */
     Vflag: function (obj) {
+        console.log(obj);
         // param f and param s are required
         if (!obj["f"]) {
             throw new Error("Function Is Required! Please Specify A Function");
@@ -72,7 +73,7 @@ const validators = {
             throw new Error("String Is Required!");
         }
         // capital validation
-        if (obj[f] === fns[0]) {
+        if (obj["f"] === fns[0]) {
             if (obj["_"].length > 0) {
                 throw new Error("Check Params!");
             }
@@ -83,7 +84,7 @@ const validators = {
             }
         }
         // encrypt validation
-        if (obj[f] === fns[1]) {
+        if (obj["f"] === fns[1]) {
             const _o = helpers.parse(obj["o"])
             if (_o["type"] !== "" && !["encrypt", "decrypt"].includes(_o["type"]) ) {
                 throw new Error("Encrypt and Decrypt is supported!");
@@ -116,8 +117,14 @@ const exec = {
         var o = JSON.parse(others);
         if (o["index"] >= 0) {
             var _idx = o["index"];
-            var _sym = o["symbol"] || " "
-            var formatStr = str.split(_sym).map(t => ( t.slice(0, _idx) + t[_idx].toUpperCase() + t.slice(_idx + 1)) ).join(" ");
+            var _sym = o["symbol"] || " ";
+            var _exep = o["exep"]; // rest lowercase
+
+            var formatStr = str.split(_sym).map(t => {
+                var first = _exep ?  t.slice(0, _idx).toLowerCase() :  t.slice(0, _idx);
+                var last = _exep ? t.slice(_idx + 1).toLowerCase() : t.slice(_idx + 1);
+                return  first  + t[_idx].toUpperCase() + last;
+            } ).join(" ")
             console.log("Formatted String: " + formatStr);
             return true;
         }
@@ -141,11 +148,6 @@ const exec = {
         }   
         return str;
     })
-
-    helpers.gExpose(fns[2], function() {
-
-    })
-
     // retrieve params need to change
     helpers.compose(validators.Vflag)(exec.start)
 })();
