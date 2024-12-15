@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/JOoNnN/jatchy_util.git"
+    "url": "git+https://github.com/yangsnapify/jatchy_util.git"
   },
   "author": "jon",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/JOoNnN/jatchy_util/issues"
+    "url": "https://github.com/yangsnapify/jatchy_util/issues"
   },
-  "homepage": "https://github.com/JOoNnN/jatchy_util#readme",
+  "homepage": "https://github.com/yangsnapify/jatchy_util#readme",
   "dependencies": {
     "minimist": "^1.2.5"
   }
