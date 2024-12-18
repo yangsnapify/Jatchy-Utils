@@ -1,10 +1,4 @@
-/**
- * -f <function> -s <string> 
- * -o <{
- *      index: number,
- *      symbol: string
- * }
- */
+
 const flagF = { f : "f", o: "o", s: "s", _: "_" }
 const Jatchy = module.exports = {}
 const fns = ["capital", "crypt", "replace", "sort", "bind",  ]; // future function chain []
